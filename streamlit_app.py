@@ -21,15 +21,18 @@ else:
     con_matrix = confusion_matrix(y_test, y_pred)
     joblib.dump(classifier, 'iris.joblib')
 
+def app():
+    st.title("Classification using Iris dataset")
 
-st.title("Classification using Iris dataset")
+    sepal_length = st.slider("Sepal length", 0.0, 10.0, 5.0)
+    sepal_width = st.slider("Sepal width", 0.0, 10.0, 5.0)
+    petal_length = st.slider("Petal length", 0.0, 10.0, 5.0)
+    petal_width = st.slider("Petal width", 0.0, 10.0, 5.0)
 
-sepal_length = st.slider("Sepal length", 0.0, 10.0, 5.0)
-sepal_width = st.slider("Sepal width", 0.0, 10.0, 5.0)
-petal_length = st.slider("Petal length", 0.0, 10.0, 5.0)
-petal_width = st.slider("Petal width", 0.0, 10.0, 5.0)
+    prediction = classifier.predict([[sepal_length, sepal_width, petal_length, petal_width]])
 
-prediction = classifier.predict([[sepal_length, sepal_width, petal_length, petal_width]])
+    st.write(f"Predicted class: {data.target_names[prediction[0]]}")
 
-st.write(f"Predicted class: {data.target_names[prediction[0]]}")
+if __name__ == '__main__':
+    app()
 
