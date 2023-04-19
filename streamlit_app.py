@@ -8,20 +8,25 @@ import joblib
 import os
 
 # To load the Iris dataset
-data = load_iris()
-if os.path.exists('iris.joblib'):
-    classifier = joblib.load('iris.joblib')
-else:
-    X = pd.DataFrame(data.data, columns=data.feature_names)
-    y = pd.Series(data.target, name='class')
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=35, shuffle=True)
-    classifier = DecisionTreeClassifier().fit(X_train, y_train)
-    y_pred = classifier.predict(X_test)
-    acc = accuracy_score(y_pred, y_test)
-    con_matrix = confusion_matrix(y_test, y_pred)
-    joblib.dump(classifier, 'iris.joblib')
+def get_model():
+
+    if os.path.exists('iris.joblib'):
+        classifier = joblib.load('iris.joblib')
+    else:
+        data = load_iris()
+        X = pd.DataFrame(data.data, columns=data.feature_names)
+        y = pd.Series(data.target, name='class')
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=35, shuffle=True)
+        classifier = DecisionTreeClassifier().fit(X_train, y_train)
+        y_pred = classifier.predict(X_test)
+        acc = accuracy_score(y_pred, y_test)
+        con_matrix = confusion_matrix(y_test, y_pred)
+        joblib.dump(classifier, 'iris.joblib')
+    return classifier
 
 def app():
+    data = load_iris()
+    classifier = get_model()
     st.title("Classification using Iris dataset")
 
     sepal_length = st.slider("Sepal length", 0.0, 10.0, 5.0)
